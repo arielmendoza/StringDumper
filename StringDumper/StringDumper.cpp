@@ -46,7 +46,7 @@ int PrintStrings(const std::vector<unsigned char>& fileBytes) {
 		else {
 			if (buffer.size() > 3) {
 				if (HasVisibleChars(buffer)) {
-					printf("0x%08x\t%s\n", offset, buffer.c_str());
+					printf("[0x%08x] [ASCII]\t%s\n", offset, buffer.c_str());
 					matchCount++;
 				}
 			}
@@ -64,7 +64,7 @@ int PrintUnicodeStrings(const std::vector<unsigned char>& fileBytes) {
 		if (i + 1 >= fileBytes.size()) {
 			if (buffer.size() > 3) {
 				if (HasVisibleChars(buffer)) {
-					printf("0x%08x\t%S\n", offset, buffer.c_str());
+					printf("[0x%08x] [UTF-16]\t%S\n", offset, buffer.c_str());
 					matchCount++;
 				}
 			}
@@ -79,7 +79,7 @@ int PrintUnicodeStrings(const std::vector<unsigned char>& fileBytes) {
 		else {
 			if (buffer.size() > 3) {
 				if (HasVisibleChars(buffer)) {
-					printf("0x%08x\t%S\n", offset, buffer.c_str());
+					printf("[0x%08x] [UTF-16]\t%S\n", offset, buffer.c_str());
 					matchCount++;
 				}
 			}
