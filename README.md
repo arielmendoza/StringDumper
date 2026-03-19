@@ -1,82 +1,86 @@
-# StringDumper
+# StringDumper — ASCII & Unicode String Extractor
 
-A Windows command-line utility that extracts readable strings from binary files — similar to the classic Unix `strings` tool, with support for both ASCII and Unicode (UTF-16 LE) strings.
+![C++17](https://img.shields.io/badge/C++-17-blue.svg?logo=c%2B%2B)
+![Platform](https://img.shields.io/badge/Platform-Windows-lightgrey.svg?logo=windows)
+![License](https://img.shields.io/badge/License-MIT-green.svg)
 
-## Features
+A lightning-fast, command-line utility for reverse engineers and malware analysts. It scans any binary file and extracts printable **ASCII** and **Unicode (UTF-16 LE)** strings, providing the exact raw hex offset for each discovery. It's the perfect first-step triage tool for unknown binaries.
 
-- Extracts **ASCII** printable strings (characters 0x20–0x7E)
-- Extracts **Unicode** (UTF-16 LE) strings
-- Reports the **file offset** of each string found
-- Minimum string length filter (4 characters) to reduce noise
-- Skips whitespace-only strings
-- Supports any binary file: executables, DLLs, firmware images, etc.
+       ____       __    _ __  ____             __
+      / __ \_____/ /_  (_) / / __ \___  ____  / /___  __  __
+     / / / / ___/ __ \/ / __/ / / / _ \/ __ \/ / __ \/ / / /
+    / /_/ / /  / /_/ / / /_/ /_/ /  __/ /_/ / / /_/ / /_/ /
+    \____/_/  /_.___/_/\__/_____/\___/ .___/_/\____/\__, /
+                                    /_/            /____/
+                          www.orbitdeploy.com
 
-## Usage
+---
 
-```
-StringDumper.exe <file_path>
-```
+## 🔥 Features
 
-**Example:**
+| Feature | Details |
+| :--- | :--- |
+| **Dual Encoding** | Seamlessly detects both standard ASCII (1-byte) and UTF-16 LE (2-byte) strings. |
+| **Precise Offsets** | Reports the exact raw offset (`0x...`) within the file where the string begins, ready to be inspected in an exact hex editor or disassembler. |
+| **Memory-Mapped I/O** | Uses Windows native memory mapping (`CreateFileMappingW`) to handle massive files with zero overhead and instantaneous processing. |
+| **Configurable Threshold** | Ignores garbage data by enforcing a minimum string length (default is usually 4+ characters). |
 
-```
-StringDumper.exe C:\Windows\System32\notepad.exe
-```
+---
 
-**Sample output:**
+## ⚙️ Requirements
 
-```
-   ____       __    _ __  ____             __
-  / __ \_____/ /_  (_) / / __ \___  ____  / /___  __  __
- / / / / ___/ __ \/ / __/ / / / _ \/ __ \/ / __ \/ / / /
-/ /_/ / /  / /_/ / / /_/ /_/ /  __/ /_/ / / /_/ / /_/ /
-\____/_/  /_.___/_/\__/_____/\___/ .___/_/\____/\__, /
-                                /_/            /____/
-========================================================
-            StringDumper Utility v1.0
-========================================================
+* **Windows OS** (Relies on native Win32 APIs for file mapping)
+* **Visual Studio 2022** (C++17 standard or later)
+* Architectures: **x64** and **x86**
 
-File: C:\Windows\System32\notepad.exe
-Size: 226816 bytes
+---
 
---- ASCII Strings (min length: 4) ---
-Offset          String
--------------   -----------------------------
-0x000000e0      !This program cannot be run in DOS mode.
-0x00000180      .text
-...
+## 🛠️ Build
 
---- Unicode Strings (min length: 4) ---
-Offset          String
--------------   -----------------------------
-0x00012a00      Open
-0x00012a20      Save
-...
+1. Open `StringDumper.slnx` in Visual Studio 2022.
+2. Select your desired configuration (`Release` is recommended for speed).
+3. Build the solution. The output will be `StringDumper.exe`.
 
--------------------------------------
-ASCII: 142 strings found
-Unicode: 87 strings found
-```
+---
 
-## Building
+## 🚀 Usage
 
-Open `StringDumper.slnx` in **Visual Studio 2022** and build.
+Run the tool from your command prompt or PowerShell terminal.
 
-Supported platforms: `x64`, `ARM64`, `x86`
-Configuration: `Release` / `Debug`
+    StringDumper.exe <path_to_binary>
 
-**Requirements:**
-- Windows
-- Visual Studio 2022 with C++ Desktop Development workload
-- C++17 or later (uses `std::filesystem`)
+**Example Output:**
 
-## Use Cases
+    [0x000004E0] [ASCII]   This program cannot be run in DOS mode.
+    [0x00001024] [ASCII]   .text
+    [0x00002A40] [UTF-16]  kernel32.dll
+    [0x00002A58] [UTF-16]  VirtualAlloc
+    [0x000031B0] [ASCII]   http://malicious-domain.com/payload.bin
 
-- Malware analysis / reverse engineering
-- Binary inspection and forensics
-- Firmware analysis
-- Finding hardcoded credentials or configuration strings in executables
+*(Outputs vary heavily depending on the target binary)*
 
-## License
+---
 
-MIT License — see [LICENSE](LICENSE) for details.
+## 📂 Use Cases in Reverse Engineering
+
+Extracting strings is typically step zero in static analysis. Use `StringDumper` to quickly identify:
+* Suspicious URLs, IP addresses, or domains.
+* Imported or dynamically loaded DLL names (`ntdll.dll`, `wininet.dll`).
+* Leftover debug paths (PDB paths) indicating the original author's environment.
+* Registry keys or file paths the executable might attempt to modify.
+
+---
+
+## 🤝 Support & More Tools
+
+This tool is part of the **OrbitDeploy** research initiative, focused on building lightweight, zero-overhead C++ utilities for system administrators and reverse engineers. 
+
+If you find this utility helpful for your static analysis workflows, please consider **giving this repository a ⭐ star** to stay updated on future releases and undocumented Windows API research!
+
+Visit [OrbitDeploy.com](https://www.orbitdeploy.com) for more tools.
+
+---
+
+## 📄 License
+
+MIT License. See [LICENSE](LICENSE) for details.
