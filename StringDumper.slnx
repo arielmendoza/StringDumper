@@ -1,0 +1,8 @@
+<Solution>
+  <Configurations>
+    <Platform Name="ARM64" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="StringDumper/StringDumper.vcxproj" Id="dab46b69-74cf-459e-ba15-eba2e231bd5a" />
+</Solution>
